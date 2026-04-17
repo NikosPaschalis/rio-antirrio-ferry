@@ -1,0 +1,4 @@
+# Development tools - do not deploy
+.claude/
+.vscode/
+*.md

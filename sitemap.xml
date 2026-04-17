@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://rio-antirrio-ferry.netlify.app/</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="el" href="https://rio-antirrio-ferry.netlify.app/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rio-antirrio-ferry.netlify.app/"/>
+  </url>
+
+  <url>
+    <loc>https://rio-antirrio-ferry.netlify.app/map.html</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>

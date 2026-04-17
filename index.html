@@ -1,0 +1,2341 @@
+<!doctype html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Live ferry schedules, ship tracking, and weather for Rio-Antirrio crossing. Real-time updates for Greek ferry times, marine traffic, and Patraikos Gulf conditions."
+    />
+    <meta
+      name="keywords"
+      content="Rio Antirrio ferry, ferry times, ship schedule, Rio Antirrio weather, Greek ferries, live ship tracking, πλοία Ρίο Αντίρριο, δρομολόγια πλοίων, ferry schedule Greece, Rio Antirrio live"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Rio-Antirrio Ferry App" />
+    <meta
+      property="og:title"
+      content="Rio-Antirrio Ferry Live: Schedules, Ship Tracking & Weather"
+    />
+    <meta
+      property="og:description"
+      content="Real-time ferry times, ship positions, and weather for Rio-Antirrio crossing in Greece."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rio-antirrio-ferry.netlify.app/" />
+    <meta
+      property="og:image"
+      content="https://rio-antirrio-ferry.netlify.app/rio-antirrio-ferris.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Ρίο–Αντίρριο Πορθμείο Live" />
+    <meta property="og:locale" content="el_GR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Rio-Antirrio Ferry Live: Schedules, Ship Tracking & Weather"
+    />
+    <meta
+      name="twitter:description"
+      content="Real-time ferry times, ship positions, and weather for Rio-Antirrio crossing in Greece."
+    />
+    <meta
+      name="twitter:image"
+      content="https://rio-antirrio-ferry.netlify.app/rio-antirrio-ferris.png"
+    />
+    <link rel="canonical" href="https://rio-antirrio-ferry.netlify.app/" />
+    <link
+      rel="alternate"
+      hreflang="el"
+      href="https://rio-antirrio-ferry.netlify.app/"
+    />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href="https://rio-antirrio-ferry.netlify.app/"
+    />
+    <link rel="preconnect" href="https://api.open-meteo.com" />
+    <link rel="preconnect" href="https://www.windfinder.com" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Πορθμείο Ρίο–Αντίρριο",
+        "alternateName": "Rio-Antirrio Ferry",
+        "description": "Live δρομολόγια, παρακολούθηση πλοίων και καιρός για το πορθμείο Ρίο–Αντίρριο. Αναχωρήσεις κάθε 20–30 λεπτά.",
+        "url": "https://rio-antirrio-ferry.netlify.app/",
+        "image": "https://rio-antirrio-ferry.netlify.app/rio-antirrio-ferris.png",
+        "telephone": "",
+        "priceRange": "€",
+        "currenciesAccepted": "EUR",
+        "paymentAccepted": "Cash, Credit Card",
+        "openingHours": "Mo-Su 00:00-24:00",
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 38.3136,
+          "longitude": 21.7799
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Ρίο",
+          "addressRegion": "Αχαΐα",
+          "addressCountry": "GR"
+        },
+        "hasMap": "https://maps.app.goo.gl/StftX8z6eRtcRn5r6",
+        "sameAs": ["https://rio-antirrio-ferry.netlify.app/"]
+      }
+    </script>
+    <title>
+      Rio-Antirrio Ferry Times & Live Ship Tracking | Ρίο–Αντίρριο Πορθμείο
+    </title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --navy: #0a1628;
+        --navy2: #0f2040;
+        --navy3: #162a52;
+        --teal: #0d9e75;
+        --teal2: #0b8562;
+        --teal-light: #e1f5ee;
+        --gold: #e8a020;
+        --gold-light: #faeeda;
+        --text: #e8edf5;
+        --text2: #9aafc8;
+        --text3: #c4d0e3;
+        --card: #0f2040;
+        --card2: #162a52;
+        --border: rgba(255, 255, 255, 0.08);
+        --border2: rgba(255, 255, 255, 0.15);
+        --red: #e24b4a;
+        --green: #1d9e75;
+      }
+      body {
+        background: var(--navy);
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        min-height: 100vh;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* Header */
+      header {
+        background: var(--navy2);
+        border-bottom: 1px solid var(--border2);
+        padding: 0 1rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .header-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 56px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--teal);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .logo-icon svg {
+        width: 18px;
+        height: 18px;
+        fill: white;
+      }
+      .logo-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0;
+      }
+      .logo-sub {
+        font-size: 11px;
+        color: var(--text2);
+        margin-top: 1px;
+      }
+      .time-badge {
+        font-size: 13px;
+        color: var(--text2);
+        font-variant-numeric: tabular-nums;
+      }
+      .lang-btn {
+        font-size: 12px;
+        color: var(--text2);
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 4px 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .lang-btn:hover {
+        color: var(--text);
+        border-color: var(--border2);
+      }
+
+      /* Nav */
+      nav {
+        background: var(--navy2);
+        border-bottom: 1px solid var(--border);
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      nav::-webkit-scrollbar {
+        display: none;
+      }
+      .nav-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+      }
+      .nav-btn {
+        padding: 10px 18px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text2);
+        border: none;
+        background: none;
+        cursor: pointer;
+        white-space: nowrap;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+      }
+      .nav-btn.active {
+        color: var(--teal);
+        border-bottom-color: var(--teal);
+      }
+      .nav-btn:hover:not(.active) {
+        color: var(--text);
+      }
+
+      /* Main */
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 1.25rem 1rem 3rem;
+      }
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+
+      /* Cards */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem;
+      }
+      .card + .card {
+        margin-top: 1rem;
+      }
+      .card-title {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.75rem;
+      }
+
+      /* Grid */
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+      }
+      @media (max-width: 600px) {
+        .grid2,
+        .grid3 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Status banner */
+      .status-banner {
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1rem;
+      }
+      .status-banner.open {
+        background: #0b3d2a;
+        border: 1px solid #1a6645;
+      }
+      .status-banner.closed {
+        background: #3d0b0b;
+        border: 1px solid #6e2020;
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .status-dot.open {
+        background: #1d9e75;
+        box-shadow: 0 0 6px #1d9e75;
+      }
+      .status-dot.closed {
+        background: var(--red);
+        box-shadow: 0 0 6px var(--red);
+      }
+      .status-text {
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      /* Countdown cards */
+      .countdown-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .countdown-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem;
+        text-align: center;
+      }
+      .countdown-label {
+        font-size: 11px;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.5rem;
+      }
+      .countdown-port {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+        margin-bottom: 0.75rem;
+      }
+      .countdown-number {
+        font-size: 38px;
+        font-weight: 700;
+        color: var(--teal);
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      .countdown-unit {
+        font-size: 11px;
+        color: var(--text2);
+        margin-top: 4px;
+      }
+      .countdown-time {
+        font-size: 13px;
+        color: var(--gold);
+        margin-top: 8px;
+      }
+      .just-left {
+        font-size: 11px;
+        color: #f0a030;
+        background: rgba(240, 160, 48, 0.12);
+        border: 1px solid rgba(240, 160, 48, 0.3);
+        border-radius: 20px;
+        padding: 3px 10px;
+        margin-top: 8px;
+        display: none;
+      }
+
+      /* Info row */
+      .info-row {
+        display: flex;
+        justify-content: space-around;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+      .info-item {
+        text-align: center;
+      }
+      .info-val {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .info-lbl {
+        font-size: 11px;
+        color: var(--text2);
+        margin-top: 3px;
+      }
+
+      /* Weather */
+      .weather-main {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      .weather-icon {
+        font-size: 48px;
+        line-height: 1;
+      }
+      .weather-temp {
+        font-size: 42px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .weather-desc {
+        font-size: 14px;
+        color: var(--text2);
+        margin-top: 4px;
+      }
+      .weather-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+      .weather-stat {
+        background: var(--card2);
+        border-radius: 8px;
+        padding: 0.75rem;
+        text-align: center;
+      }
+      .weather-stat-val {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .weather-stat-lbl {
+        font-size: 11px;
+        color: var(--text2);
+        margin-top: 3px;
+      }
+      .wind-bar {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        margin-top: 0.5rem;
+        justify-content: center;
+      }
+      .wind-bft {
+        width: 10px;
+        height: 16px;
+        border-radius: 2px;
+        background: var(--border2);
+      }
+      .wind-bft.active {
+        background: var(--teal);
+      }
+
+      /* Schedule */
+      .schedule-band {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+      .band-header {
+        background: var(--card2);
+        padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .band-time {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .band-freq {
+        font-size: 12px;
+        color: var(--teal);
+        background: rgba(13, 158, 117, 0.15);
+        padding: 3px 8px;
+        border-radius: 20px;
+      }
+      .departures {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+        gap: 6px;
+        padding: 0.75rem;
+      }
+      .dep-pill {
+        background: var(--card2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 5px 6px;
+        text-align: center;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        color: var(--text3);
+      }
+      .dep-pill.next {
+        background: rgba(13, 158, 117, 0.2);
+        border-color: var(--teal);
+        color: var(--teal);
+        font-weight: 600;
+      }
+      .dep-pill.past {
+        opacity: 0.35;
+      }
+      .band-sub {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text2);
+        padding: 0.5rem 0.75rem 0.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* Prices */
+      .price-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .price-table th {
+        font-size: 11px;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 8px 10px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      .price-table td {
+        padding: 10px 10px;
+        font-size: 14px;
+        border-bottom: 1px solid var(--border);
+      }
+      .price-table tr:last-child td {
+        border: none;
+      }
+      .price-val {
+        font-weight: 600;
+        color: var(--gold);
+        text-align: right;
+      }
+      .price-free {
+        color: var(--green);
+        font-weight: 600;
+      }
+      .price-badge {
+        font-size: 11px;
+        background: rgba(232, 160, 32, 0.15);
+        color: var(--gold);
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+      .compare-box {
+        background: rgba(13, 158, 117, 0.1);
+        border: 1px solid rgba(13, 158, 117, 0.3);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+      .compare-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--teal);
+        margin-bottom: 0.5rem;
+      }
+      .compare-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        padding: 3px 0;
+      }
+      .compare-saving {
+        color: var(--green);
+        font-weight: 600;
+      }
+
+      /* Map */
+      .map-frame {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        height: 420px;
+      }
+      .map-frame iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+      .map-links {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+      .map-link {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: border-color 0.2s;
+      }
+      .map-link:hover {
+        border-color: var(--border2);
+      }
+      .map-link-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+      .map-link-text {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+      }
+      .map-link-sub {
+        font-size: 11px;
+        color: var(--text2);
+        margin-top: 2px;
+      }
+
+      /* Info page */
+      .info-card-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .info-card-row:last-child {
+        border: none;
+      }
+      .info-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: var(--card2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+      .info-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+      }
+      .info-value {
+        font-size: 13px;
+        color: var(--text2);
+        margin-top: 2px;
+      }
+      .info-action {
+        margin-left: auto;
+        font-size: 12px;
+        color: var(--teal);
+        background: rgba(13, 158, 117, 0.15);
+        padding: 4px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        flex-shrink: 0;
+        border: none;
+        text-decoration: none;
+      }
+
+      /* Loading */
+      .loading {
+        color: var(--text2);
+        font-size: 14px;
+        text-align: center;
+        padding: 2rem;
+      }
+      .dot-anim::after {
+        content: '...';
+        animation: dots 1.5s infinite;
+      }
+      @keyframes dots {
+        0%,
+        100% {
+          content: '...';
+        }
+        33% {
+          content: '.';
+        }
+        66% {
+          content: '...';
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M3 17h18l-2-5H5L3 17zm2-7h14l1-3H4l1 3zm7-7C9 3 8 4 8 5s1 2 2 2 2-1 2-2-1-2-2-2z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h1
+              class="logo-title"
+              data-el="Ρίο – Αντίρριο"
+              data-en="Rio - Antirrio"
+            >
+              Ρίο – Αντίρριο
+            </h1>
+            <div class="logo-sub" data-el="Πορθμείο Live" data-en="Ferry Live">
+              Πορθμείο Live
+            </div>
+          </div>
+        </div>
+        <div class="time-badge" id="clock">--:--:--</div>
+        <button class="lang-btn" onclick="toggleLanguage()">EN</button>
+      </div>
+    </header>
+
+    <nav>
+      <div class="nav-inner">
+        <button
+          class="nav-btn"
+          data-page="home"
+          onclick="showPage('home')"
+          data-el="Αρχική"
+          data-en="Home"
+        >
+          Αρχική
+        </button>
+        <button
+          class="nav-btn"
+          data-page="schedule"
+          onclick="showPage('schedule')"
+          data-el="Δρομολόγια"
+          data-en="Schedules"
+        >
+          Δρομολόγια
+        </button>
+        <button
+          class="nav-btn"
+          data-page="prices"
+          onclick="showPage('prices')"
+          data-el="Τιμές"
+          data-en="Prices"
+        >
+          Τιμές
+        </button>
+        <a
+          href="map.html"
+          class="nav-btn"
+          style="border: none; padding: 10px 18px; cursor: pointer"
+          data-el="Ζωντανή Παρακολούθηση"
+          data-en="Live Vessel Tracking"
+          >Ζωντανή Παρακολούθηση</a
+        >
+        <button
+          class="nav-btn"
+          data-page="weather"
+          onclick="showPage('weather')"
+          data-el="Καιρός"
+          data-en="Weather"
+        >
+          Καιρός
+        </button>
+        <button
+          class="nav-btn"
+          data-page="info"
+          onclick="showPage('info')"
+          data-el="Πληροφορίες"
+          data-en="Info"
+        >
+          Πληροφορίες
+        </button>
+      </div>
+    </nav>
+
+    <main>
+      <!-- HOME -->
+      <div class="page" id="page-home">
+        <div id="status-banner" class="status-banner open">
+          <div class="status-dot open" id="status-dot"></div>
+          <span
+            class="status-text"
+            id="status-text"
+            data-el="Υπολογισμός δρομολογίων..."
+            data-en="Calculating schedules..."
+            >Υπολογισμός δρομολογίων...</span
+          >
+        </div>
+
+        <div class="countdown-grid">
+          <div class="countdown-card">
+            <div
+              class="countdown-label"
+              data-el="Επόμενο πλοίο"
+              data-en="Next ferry"
+            >
+              Επόμενο πλοίο
+            </div>
+            <div
+              class="countdown-port"
+              data-el="🏖 Από Ρίο"
+              data-en="🏖 From Rio"
+            >
+              🏖 Από Ρίο
+            </div>
+            <div class="countdown-number" id="cnt-rio">--</div>
+            <div class="countdown-unit" data-el="λεπτά" data-en="minutes">
+              λεπτά
+            </div>
+            <div class="countdown-time" id="cnt-rio-time">--:--</div>
+            <div
+              class="just-left"
+              id="just-left-rio"
+              data-el="⚠️ Μόλις αναχώρησε"
+              data-en="⚠️ Just departed"
+            >
+              ⚠️ Μόλις αναχώρησε
+            </div>
+          </div>
+          <div class="countdown-card">
+            <div
+              class="countdown-label"
+              data-el="Επόμενο πλοίο"
+              data-en="Next ferry"
+            >
+              Επόμενο πλοίο
+            </div>
+            <div
+              class="countdown-port"
+              data-el="⚓ Από Αντίρριο"
+              data-en="⚓ From Antirrio"
+            >
+              ⚓ Από Αντίρριο
+            </div>
+            <div class="countdown-number" id="cnt-ant">--</div>
+            <div class="countdown-unit" data-el="λεπτά" data-en="minutes">
+              λεπτά
+            </div>
+            <div class="countdown-time" id="cnt-ant-time">--:--</div>
+            <div
+              class="just-left"
+              id="just-left-ant"
+              data-el="⚠️ Μόλις αναχώρησε"
+              data-en="⚠️ Just departed"
+            >
+              ⚠️ Μόλις αναχώρησε
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-item">
+            <div class="info-val">15'</div>
+            <div
+              class="info-lbl"
+              data-el="Διάρκεια διαδρομής"
+              data-en="Trip duration"
+            >
+              Διάρκεια διαδρομής
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-val" id="freq-now">--'</div>
+            <div
+              class="info-lbl"
+              data-el="Συχνότητα τώρα"
+              data-en="Frequency now"
+            >
+              Συχνότητα τώρα
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-val">7€</div>
+            <div class="info-lbl" data-el="Τιμή ΙΧ" data-en="Car price">
+              Τιμή ΙΧ
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-val">Δωρεάν</div>
+            <div class="info-lbl" data-el="Επιβάτες" data-en="Passengers">
+              Επιβάτες
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather mini -->
+        <div class="card" id="weather-mini">
+          <div
+            class="card-title"
+            data-el="Καιρός · Ρίο"
+            data-en="Weather · Rio"
+          >
+            Καιρός · Ρίο
+          </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span id="wm-icon" style="font-size: 32px">🌤</span>
+              <div>
+                <div style="font-size: 26px; font-weight: 700" id="wm-temp">
+                  --°C
+                </div>
+                <div
+                  style="font-size: 12px; color: var(--text2)"
+                  id="wm-desc"
+                  data-el="Φόρτωση"
+                  data-en="Loading"
+                >
+                  Φόρτωση<span class="dot-anim"></span>
+                </div>
+              </div>
+            </div>
+            <div style="text-align: right">
+              <div
+                style="font-size: 13px; color: var(--text2)"
+                data-el="Άνεμος"
+                data-en="Wind"
+              >
+                Άνεμος
+              </div>
+              <div style="font-size: 16px; font-weight: 600" id="wm-wind">
+                -- Bft
+              </div>
+              <div style="font-size: 12px; color: var(--text2)" id="wm-windspd">
+                -- km/h
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick links -->
+        <div class="quick-links-row">
+          <div class="card quick-link" onclick="showPage('schedule')">
+            <div class="quick-link-icon">🕐</div>
+            <div class="quick-link-body">
+              <div
+                class="quick-link-title"
+                data-el="Δρομολόγια 2026"
+                data-en="Schedules 2026"
+              >
+                Δρομολόγια 2026
+              </div>
+              <div
+                class="quick-link-sub"
+                data-el="Πλήρες πρόγραμμα"
+                data-en="Full schedule"
+              >
+                Πλήρες πρόγραμμα
+              </div>
+            </div>
+            <div class="quick-link-arrow">›</div>
+          </div>
+          <div class="card quick-link" onclick="showPage('prices')">
+            <div class="quick-link-icon">💶</div>
+            <div class="quick-link-body">
+              <div
+                class="quick-link-title"
+                data-el="Τιμολόγιο 2026"
+                data-en="Pricelist 2026"
+              >
+                Τιμολόγιο 2026
+              </div>
+              <div
+                class="quick-link-sub"
+                data-el="Ναύλοι ανά κατηγορία"
+                data-en="Fares by category"
+              >
+                Ναύλοι ανά κατηγορία
+              </div>
+            </div>
+            <div class="quick-link-arrow">›</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCHEDULE -->
+      <div class="page" id="page-schedule">
+        <div class="card" style="margin-bottom: 1rem">
+          <div
+            class="card-title"
+            data-el="Ισχύει από 01.04.2026 · Καθημερινά & Σαββατοκύριακο"
+            data-en="Valid from 01.04.2026 · Weekdays & Weekends"
+          >
+            Ισχύει από 01.04.2026 · Καθημερινά & Σαββατοκύριακο
+          </div>
+          <div
+            style="font-size: 13px; color: var(--text2); line-height: 1.7"
+            data-el="Πρωί &amp; Νύχτα: διαφορετικές ώρες ανά λιμάνι. Απόγευμα: <strong style='color: var(--text)'>ταυτόχρονες</strong> αναχωρήσεις. Δεν απαιτείται κράτηση · Πληρωμή εντός πλοίου (POS/Μετρητά)."
+            data-en="Morning &amp; Night: different times per port. Afternoon: <strong style='color: var(--text)'>simultaneous</strong> departures. No reservation required · Payment on board (POS/Cash)."
+          >
+            Πρωί &amp; Νύχτα: διαφορετικές ώρες ανά λιμάνι. Απόγευμα:
+            <strong style="color: var(--text)">ταυτόχρονες</strong> αναχωρήσεις.
+            Δεν απαιτείται κράτηση · Πληρωμή εντός πλοίου (POS/Μετρητά).
+          </div>
+        </div>
+
+        <div class="schedule-band">
+          <div class="band-header">
+            <div class="band-time">07:00 – 15:00</div>
+            <div
+              class="band-freq"
+              data-el="Ανά 30 λεπτά"
+              data-en="Every 30 minutes"
+            >
+              Ανά 30 λεπτά
+            </div>
+          </div>
+          <div class="band-sub" data-el="🏖 Από Ρίο" data-en="🏖 From Rio">
+            🏖 Από Ρίο
+          </div>
+          <div class="departures" id="sched-morning-rio"></div>
+          <div
+            class="band-sub"
+            data-el="⚓ Από Αντίρριο"
+            data-en="⚓ From Antirrio"
+          >
+            ⚓ Από Αντίρριο
+          </div>
+          <div class="departures" id="sched-morning-ant"></div>
+        </div>
+
+        <div class="schedule-band">
+          <div class="band-header">
+            <div class="band-time">15:00 – 23:00</div>
+            <div
+              class="band-freq"
+              data-el="Ανά 20 λεπτά"
+              data-en="Every 20 minutes"
+            >
+              Ανά 20 λεπτά
+            </div>
+          </div>
+          <div
+            class="band-sub"
+            data-el="🏖 Από Ρίο & ⚓ Αντίρριο"
+            data-en="🏖 From Rio & ⚓ Antirrio"
+          >
+            🏖 Από Ρίο &amp; ⚓ Αντίρριο
+          </div>
+          <div class="departures" id="sched-afternoon"></div>
+        </div>
+
+        <div class="schedule-band">
+          <div class="band-header">
+            <div class="band-time">23:00 – 07:00</div>
+            <div
+              class="band-freq"
+              data-el="Ανά 90 λεπτά"
+              data-en="Every 90 minutes"
+            >
+              Ανά 90 λεπτά
+            </div>
+          </div>
+          <div class="band-sub" data-el="🏖 Από Ρίο" data-en="🏖 From Rio">
+            🏖 Από Ρίο
+          </div>
+          <div class="departures" id="sched-night-rio"></div>
+          <div
+            class="band-sub"
+            data-el="⚓ Από Αντίρριο"
+            data-en="⚓ From Antirrio"
+          >
+            ⚓ Από Αντίρριο
+          </div>
+          <div class="departures" id="sched-night-ant"></div>
+        </div>
+
+        <div class="card">
+          <div
+            style="font-size: 12px; color: var(--text2); line-height: 1.7"
+            data-el="⚠️ Τα δρομολόγια μπορεί να τροποποιηθούν λόγω καιρικών συνθηκών ή απόφασης λιμενικής αρχής.<br /> ☎️ Λιμενικό Ρίου: <a href='tel:2610991203' style='color: var(--teal)'>2610 991 203</a>"
+            data-en="⚠️ Schedules may be modified due to weather conditions or port authority decision.<br /> ☎️ Rio Port Authority: <a href='tel:2610991203' style='color: var(--teal)'>2610 991 203</a>"
+          >
+            ⚠️ Τα δρομολόγια μπορεί να τροποποιηθούν λόγω καιρικών συνθηκών ή
+            απόφασης λιμενικής αρχής.<br />
+            ☎️ Λιμενικό Ρίου:
+            <a href="tel:2610991203" style="color: var(--teal)">2610 991 203</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRICES -->
+      <div class="page" id="page-prices">
+        <!-- Inner tab bar -->
+        <div class="prices-tab-bar">
+          <button
+            class="prices-tab-btn active"
+            data-tab="fares"
+            onclick="showPriceTab('fares')"
+            data-el="🏷 Ναύλοι"
+            data-en="🏷 Fares"
+          >
+            🏷 Ναύλοι
+          </button>
+          <button
+            class="prices-tab-btn"
+            data-tab="compare"
+            onclick="showPriceTab('compare')"
+            data-el="⚖️ Σύγκριση"
+            data-en="⚖️ Compare"
+          >
+            ⚖️ Σύγκριση
+          </button>
+          <button
+            class="prices-tab-btn"
+            data-tab="info"
+            onclick="showPriceTab('info')"
+            data-el="ℹ️ Χρήσιμα"
+            data-en="ℹ️ Useful"
+          >
+            ℹ️ Χρήσιμα
+          </button>
+        </div>
+
+        <!-- TAB 1: Fares -->
+        <div class="price-section active" id="price-section-fares">
+          <div class="card">
+            <div
+              class="card-title"
+              data-el="Ναύλοι 2026 · Ενημέρωση 20.03.2026"
+              data-en="Fares 2026 · Updated 20.03.2026"
+            >
+              Ναύλοι 2026 · Ενημέρωση 20.03.2026
+            </div>
+            <table class="price-table">
+              <thead>
+                <tr>
+                  <th data-el="Κατηγορία" data-en="Category">Κατηγορία</th>
+                  <th style="text-align: right" data-el="Τιμή" data-en="Price">
+                    Τιμή
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    data-el="Επιβάτες / Πεζοί"
+                    data-en="Passengers / Pedestrians"
+                  >
+                    Επιβάτες / Πεζοί
+                  </td>
+                  <td
+                    class="price-val price-free"
+                    data-el="Δωρεάν"
+                    data-en="Free"
+                  >
+                    Δωρεάν
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-el="Μοτοσυκλέτες / Μηχανάκια"
+                    data-en="Motorcycles / Scooters"
+                  >
+                    Μοτοσυκλέτες / Μηχανάκια
+                  </td>
+                  <td class="price-val">1,00 €</td>
+                </tr>
+                <tr>
+                  <td data-el="ΙΧ αυτοκίνητο" data-en="Passenger car">
+                    ΙΧ αυτοκίνητο
+                  </td>
+                  <td class="price-val">7,00 €</td>
+                </tr>
+                <tr>
+                  <td>
+                    ΙΧ Πολύτεκνων / ΑΜΕΑ
+                    <span
+                      class="price-badge"
+                      data-el="Έκπτωση"
+                      data-en="Discount"
+                      >Έκπτωση</span
+                    >
+                  </td>
+                  <td class="price-val">4,00 €</td>
+                </tr>
+                <tr>
+                  <td data-el="Φορτηγό 2 αξόνων" data-en="Truck 2 axles">
+                    Φορτηγό 2 αξόνων
+                  </td>
+                  <td class="price-val">12,00 €</td>
+                </tr>
+                <tr>
+                  <td data-el="Φορτηγό 3 αξόνων" data-en="Truck 3 axles">
+                    Φορτηγό 3 αξόνων
+                  </td>
+                  <td class="price-val">17,00 €</td>
+                </tr>
+                <tr>
+                  <td data-el="Φορτηγό 4 αξόνων" data-en="Truck 4 axles">
+                    Φορτηγό 4 αξόνων
+                  </td>
+                  <td class="price-val">22,00 €</td>
+                </tr>
+                <tr>
+                  <td data-el="Φορτηγό 5 αξόνων" data-en="Truck 5 axles">
+                    Φορτηγό 5 αξόνων
+                  </td>
+                  <td class="price-val">25,00 €</td>
+                </tr>
+                <tr>
+                  <td
+                    data-el="Λεωφορείο έως 20 θέσεις"
+                    data-en="Bus up to 20 seats"
+                  >
+                    Λεωφορείο έως 20 θέσεις
+                  </td>
+                  <td class="price-val">17,00 €</td>
+                </tr>
+                <tr>
+                  <td
+                    data-el="Λεωφορείο έως 40 θέσεις"
+                    data-en="Bus up to 40 seats"
+                  >
+                    Λεωφορείο έως 40 θέσεις
+                  </td>
+                  <td class="price-val">17,00 €</td>
+                </tr>
+                <tr>
+                  <td data-el="Λεωφορείο 40+ θέσεις" data-en="Bus 40+ seats">
+                    Λεωφορείο 40+ θέσεις
+                  </td>
+                  <td class="price-val">29,00 €</td>
+                </tr>
+              </tbody>
+            </table>
+            <div
+              style="font-size: 11px; color: var(--text2); margin-top: 0.75rem"
+              data-el="Τρόπος πληρωμής: POS · Μετρητά"
+              data-en="Payment method: POS · Cash"
+            >
+              Τρόπος πληρωμής: POS · Μετρητά
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Comparison -->
+        <div class="price-section" id="price-section-compare">
+          <div class="compare-box">
+            <div
+              class="compare-title"
+              data-el="Σύγκριση Κόστους: Φεριμπότ vs Γέφυρα"
+              data-en="Cost Comparison: Ferry vs Bridge"
+            >
+              Σύγκριση Κόστους: Φεριμπότ vs Γέφυρα
+            </div>
+            <table class="price-table" style="border: none">
+              <thead>
+                <tr>
+                  <th
+                    style="color: var(--teal); font-size: 10px"
+                    data-el="ΟΧΗΜΑ"
+                    data-en="VEHICLE"
+                  >
+                    ΟΧΗΜΑ
+                  </th>
+                  <th
+                    style="
+                      text-align: right;
+                      color: var(--green);
+                      font-size: 10px;
+                    "
+                    data-el="ΚΕΡΔΟΣ vs ΓΕΦΥΡΑ"
+                    data-en="SAVING vs BRIDGE"
+                  >
+                    ΚΕΡΔΟΣ vs ΓΕΦΥΡΑ
+                  </th>
+                </tr>
+              </thead>
+              <tbody style="font-size: 13px">
+                <tr>
+                  <td data-el="ΙΧ Αυτοκίνητο" data-en="Passenger Car">
+                    ΙΧ Αυτοκίνητο
+                  </td>
+                  <td class="price-val" style="color: var(--green)">
+                    + 8,90 €
+                  </td>
+                </tr>
+                <tr>
+                  <td data-el="Μοτοσυκλέτα" data-en="Motorcycle">
+                    Μοτοσυκλέτα
+                  </td>
+                  <td class="price-val" style="color: var(--green)">
+                    + 1,50 €
+                  </td>
+                </tr>
+                <tr>
+                  <td data-el="ΑΜΕΑ (με κάρτα)" data-en="Disabled (with card)">
+                    ΑΜΕΑ (με κάρτα)
+                  </td>
+                  <td class="price-val" style="color: var(--green)">
+                    + 1,00 €
+                  </td>
+                </tr>
+                <tr>
+                  <td data-el="Φορτηγό (2 άξονες)" data-en="Truck (2 axles)">
+                    Φορτηγό (2 άξονες)
+                  </td>
+                  <td class="price-val" style="color: var(--green)">
+                    + 12,70 €
+                  </td>
+                </tr>
+                <tr>
+                  <td data-el="Φορτηγό (3 άξονες)" data-en="Truck (3 axles)">
+                    Φορτηγό (3 άξονες)
+                  </td>
+                  <td class="price-val" style="color: var(--green)">
+                    + 23,10 €
+                  </td>
+                </tr>
+                <tr>
+                  <td data-el="Φορτηγό (4+ άξονες)" data-en="Truck (4+ axles)">
+                    Φορτηγό (4+ άξονες)
+                  </td>
+                  <td class="price-val" style="color: var(--green)">
+                    + 28,90 €
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    data-el="Λεωφορείο (έως 20 θ.)"
+                    data-en="Bus (up to 20s.)"
+                  >
+                    Λεωφορείο (έως 20 θ.)
+                  </td>
+                  <td class="price-val" style="color: var(--green)">
+                    + 20,80 €
+                  </td>
+                </tr>
+                <tr>
+                  <td data-el="Λεωφορείο (20-40 θ.)" data-en="Bus (20-40s.)">
+                    Λεωφορείο (20-40 θ.)
+                  </td>
+                  <td class="price-val" style="color: var(--green)">
+                    + 36,10 €
+                  </td>
+                </tr>
+                <tr>
+                  <td data-el="Λεωφορείο (40+ θ.)" data-en="Bus (40+ seats)">
+                    Λεωφορείο (40+ θ.)
+                  </td>
+                  <td class="price-val" style="color: var(--green)">
+                    + 52,40 €
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div
+              style="
+                font-size: 11px;
+                color: var(--text2);
+                margin-top: 10px;
+                font-style: italic;
+              "
+              data-el="* Κέρδος = διόδιο γέφυρας − ναύλος πλοίου."
+              data-en="* Saving = bridge toll − ferry fare."
+            >
+              * Κέρδος = διόδιο γέφυρας − ναύλος πλοίου.
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Useful info -->
+        <div class="price-section" id="price-section-info">
+          <div class="card">
+            <div
+              class="card-title"
+              data-el="Χρήσιμες πληροφορίες"
+              data-en="Useful information"
+            >
+              Χρήσιμες πληροφορίες
+            </div>
+            <div style="font-size: 13px; color: var(--text2); line-height: 2.2">
+              ✅ Δωρεάν διέλευση επιβατών — χρέωση μόνο για όχημα<br />
+              ✅ Δεν απαιτείται κράτηση<br />
+              ✅ Διάρκεια διαδρομής: ~15 λεπτά<br />
+              ✅ Πληρωμή εντός πλοίου (POS ή μετρητά)<br />
+              ⚠️ Αμφιβολία για κατηγορία; ρωτήστε πρίν την επιβίβαση
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEATHER -->
+      <div class="page" id="page-weather">
+        <div class="card" style="margin-top: 1rem">
+          <div class="card-title" data-el="Live πηγές" data-en="Live sources">
+            Live πηγές
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div
+              style="
+                background: var(--card2);
+                border-radius: 10px;
+                padding: 1rem;
+              "
+            >
+              <div
+                style="
+                  font-size: 14px;
+                  font-weight: 600;
+                  color: var(--text);
+                  margin-bottom: 1rem;
+                "
+                data-el="📊 Meteo.gr · Σταθμός Ρίου"
+                data-en="📊 Meteo.gr · Rio Station"
+              >
+                📊 Meteo.gr · Σταθμός Ρίου
+              </div>
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem"
+              >
+                <div>
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Θερμοκρασία"
+                    data-en="Temperature"
+                  >
+                    Θερμοκρασία
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-temp"
+                  >
+                    --°C
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Υγρασία"
+                    data-en="Humidity"
+                  >
+                    Υγρασία
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-hum"
+                  >
+                    --%
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Άνεμος"
+                    data-en="Wind"
+                  >
+                    Άνεμος
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-wind"
+                  >
+                    -- km/h
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Διεύθυνση"
+                    data-en="Direction"
+                  >
+                    Διεύθυνση
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-dir"
+                  >
+                    --
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Βαρόμετρο"
+                    data-en="Barometer"
+                  >
+                    Βαρόμετρο
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-bar"
+                  >
+                    -- hPa
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 12px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Σημείο Δρόσου"
+                    data-en="Dew Point"
+                  >
+                    Σημείο Δρόσου
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-dew"
+                  >
+                    --°C
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  margin-top: 1rem;
+                  padding-top: 1rem;
+                  border-top: 1px solid rgba(255, 255, 255, 0.1);
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 1rem;
+                "
+              >
+                <div>
+                  <div
+                    style="
+                      font-size: 11px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Σημερινή Βροχή"
+                    data-en="Today Rain"
+                  >
+                    Σημερινή Βροχή
+                  </div>
+                  <div
+                    style="
+                      font-size: 14px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-today-rain"
+                  >
+                    -- mm
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 11px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Μηνιαία Βροχή"
+                    data-en="Monthly Rain"
+                  >
+                    Μηνιαία Βροχή
+                  </div>
+                  <div
+                    style="
+                      font-size: 14px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-monthly-rain"
+                  >
+                    -- mm
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 11px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Ανατολή"
+                    data-en="Sunrise"
+                  >
+                    Ανατολή
+                  </div>
+                  <div
+                    style="
+                      font-size: 14px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-sunrise"
+                  >
+                    --:--
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 11px;
+                      color: var(--text2);
+                      margin-bottom: 0.25rem;
+                    "
+                    data-el="Δύση"
+                    data-en="Sunset"
+                  >
+                    Δύση
+                  </div>
+                  <div
+                    style="
+                      font-size: 14px;
+                      font-weight: 600;
+                      color: var(--text);
+                    "
+                    id="wx-sunset"
+                  >
+                    --:--
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              style="
+                background: var(--card2);
+                border-radius: 10px;
+                padding: 1rem;
+                margin-top: 0.5rem;
+              "
+            >
+              <div
+                style="
+                  font-size: 14px;
+                  font-weight: 600;
+                  color: var(--text);
+                  margin-bottom: 0.5rem;
+                "
+                data-el="🌊 Windfinder · Πρόγνωση ανέμου"
+                data-en="🌊 Windfinder · Wind forecast"
+              >
+                🌊 Windfinder · Πρόγνωση ανέμου
+              </div>
+              <iframe
+                src="https://www.windfinder.com/widget/forecast/rio_patraikos_kolpos?unit_wave=m&unit_rain=mm&unit_temperature=c&unit_wind=kmh&columns=1&days=3&show_pressure=false&show_waves=false"
+                style="
+                  width: 100%;
+                  height: 500px;
+                  border: none;
+                  border-radius: 8px;
+                "
+                title="Windfinder Forecast"
+                loading="lazy"
+              ></iframe>
+              <div style="text-align: center; margin-top: 0.5rem">
+                <a
+                  href="https://www.windfinder.com/weatherforecast/rio_patraikos_kolpos"
+                  target="_blank"
+                  style="font-size: 12px; color: var(--teal)"
+                  data-el="Πλήρης πρόγνωση →"
+                  data-en="Full forecast →"
+                  >Πλήρης πρόγνωση →</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div class="page" id="page-info">
+        <div class="card" style="margin-bottom: 1rem">
+          <div
+            class="card-title"
+            data-el="Επικοινωνία & Χρήσιμα"
+            data-en="Contact & Useful"
+          >
+            Επικοινωνία & Χρήσιμα
+          </div>
+          <div class="info-card-row">
+            <div class="info-icon">📞</div>
+            <div>
+              <div
+                class="info-label"
+                data-el="Λιμενικό Ρίου"
+                data-en="Rio Port Authority"
+              >
+                Λιμενικό Ρίου
+              </div>
+              <div class="info-value">2610 991 203</div>
+            </div>
+            <a href="tel:2610991203" class="info-action">Κλήση</a>
+          </div>
+          <div class="info-card-row">
+            <div class="info-icon">📍</div>
+            <div>
+              <div class="info-label" data-el="Λιμάνι Ρίου" data-en="Rio Port">
+                Λιμάνι Ρίου
+              </div>
+              <div class="info-value">38.3136°N 21.7799°E</div>
+            </div>
+            <a
+              href="https://maps.app.goo.gl/StftX8z6eRtcRn5r6"
+              target="_blank"
+              class="info-action"
+              data-el="Χάρτης"
+              data-en="Map"
+              >Χάρτης</a
+            >
+          </div>
+          <div class="info-card-row">
+            <div class="info-icon">📍</div>
+            <div>
+              <div
+                class="info-label"
+                data-el="Λιμάνι Αντιρρίου"
+                data-en="Antirrio Port"
+              >
+                Λιμάνι Αντιρρίου
+              </div>
+              <div class="info-value">38.3310°N 21.7635°E</div>
+            </div>
+            <a
+              href="https://maps.app.goo.gl/NanACR6uLH9r8rf56"
+              target="_blank"
+              class="info-action"
+              data-el="Χάρτης"
+              data-en="Map"
+              >Χάρτης</a
+            >
+          </div>
+        </div>
+        <div class="card" style="margin-bottom: 1rem">
+          <div
+            class="card-title"
+            data-el="Πληροφορίες γραμμής"
+            data-en="Line information"
+          >
+            Πληροφορίες γραμμής
+          </div>
+          <div class="info-card-row">
+            <div class="info-icon">⏱</div>
+            <div>
+              <div
+                class="info-label"
+                data-el="Διάρκεια διαδρομής"
+                data-en="Trip duration"
+              >
+                Διάρκεια διαδρομής
+              </div>
+              <div class="info-value">~15 λεπτά</div>
+            </div>
+          </div>
+          <div class="info-card-row">
+            <div class="info-icon">📅</div>
+            <div>
+              <div class="info-label" data-el="Λειτουργία" data-en="Operation">
+                Λειτουργία
+              </div>
+              <div
+                class="info-value"
+                data-el="7 ημέρες / εβδομάδα · Όλο το χρόνο"
+                data-en="7 days / week · All year round"
+              >
+                7 ημέρες / εβδομάδα · Όλο το χρόνο
+              </div>
+            </div>
+          </div>
+          <div class="info-card-row">
+            <div class="info-icon">💳</div>
+            <div>
+              <div class="info-label" data-el="Πληρωμή" data-en="Payment">
+                Πληρωμή
+              </div>
+              <div
+                class="info-value"
+                data-el="POS & Μετρητά εντός πλοίου"
+                data-en="POS & Cash on board"
+              >
+                POS & Μετρητά εντός πλοίου
+              </div>
+            </div>
+          </div>
+          <div class="info-card-row">
+            <div class="info-icon">🎟</div>
+            <div>
+              <div class="info-label" data-el="Κράτηση" data-en="Reservation">
+                Κράτηση
+              </div>
+              <div
+                class="info-value"
+                data-el="Δεν απαιτείται"
+                data-en="Not required"
+              >
+                Δεν απαιτείται
+              </div>
+            </div>
+          </div>
+          <div class="info-card-row">
+            <div class="info-icon">🚶</div>
+            <div>
+              <div
+                class="info-label"
+                data-el="Επιβάτες πεζοί"
+                data-en="Pedestrian passengers"
+              >
+                Επιβάτες πεζοί
+              </div>
+              <div class="info-value" data-el="Δωρεάν" data-en="Free">
+                Δωρεάν
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRIVACY POLICY -->
+      <div class="page" id="page-privacy">
+        <div class="card" style="margin-bottom:1rem">
+          <div class="card-title">🔒 Πολιτική Απορρήτου</div>
+          <p class="privacy-intro">Τελευταία ενημέρωση: Απρίλιος 2026</p>
+
+          <div class="privacy-section">
+            <div class="privacy-heading">1. Ποιοι είμαστε</div>
+            <p>Η ιστοσελίδα <strong>rio-antirrio-ferry.netlify.app</strong> είναι ανεξάρτητη πληροφοριακή εφαρμογή για τα δρομολόγια του πορθμείου Ρίο–Αντίρριο. Δεν σχετιζόμαστε με καμία επίσημη εταιρεία πορθμείων ή λιμενική αρχή.</p>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-heading">2. Δεδομένα που συλλέγουμε</div>
+            <p>Η ίδια η εφαρμογή <strong>δεν συλλέγει, δεν αποθηκεύει και δεν επεξεργάζεται</strong> προσωπικά δεδομένα. Δεν υπάρχουν φόρμες εγγραφής, λογαριασμοί ή προφίλ χρηστών.</p>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-heading">3. Υπηρεσίες τρίτων</div>
+            <p>Η εφαρμογή χρησιμοποιεί τις παρακάτω υπηρεσίες τρίτων, οι οποίες ενδέχεται να επεξεργάζονται δεδομένα χρήστη (π.χ. διεύθυνση IP) σύμφωνα με τις δικές τους πολιτικές:</p>
+
+            <div class="privacy-service-row">
+              <div class="privacy-service-icon">📊</div>
+              <div>
+                <div class="privacy-service-name">Google Analytics</div>
+                <div class="privacy-service-desc">Χρησιμοποιείται για ανώνυμη στατιστική ανάλυση επισκεψιμότητας (αριθμός επισκεπτών, σελίδες, χώρες). Τα δεδομένα είναι ανωνυμοποιημένα. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="privacy-link">Πολιτική Google →</a></div>
+              </div>
+            </div>
+
+            <div class="privacy-service-row">
+              <div class="privacy-service-icon">🌬️</div>
+              <div>
+                <div class="privacy-service-name">Windfinder (iframe)</div>
+                <div class="privacy-service-desc">Ενσωματωμένος χάρτης καιρού/ανέμου. Ενδέχεται να τοποθετεί cookies τρίτων. <a href="https://www.windfinder.com/privacy" target="_blank" rel="noopener" class="privacy-link">Πολιτική Windfinder →</a></div>
+              </div>
+            </div>
+
+            <div class="privacy-service-row">
+              <div class="privacy-service-icon">🚢</div>
+              <div>
+                <div class="privacy-service-name">VesselFinder (Ζωντανή Παρακολούθηση)</div>
+                <div class="privacy-service-desc">Ενσωματωμένος χάρτης παρακολούθησης πλοίων. Ενδέχεται να τοποθετεί cookies τρίτων. <a href="https://www.vesselfinder.com/privacy-policy" target="_blank" rel="noopener" class="privacy-link">Πολιτική VesselFinder →</a></div>
+              </div>
+            </div>
+
+            <div class="privacy-service-row">
+              <div class="privacy-service-icon">☁️</div>
+              <div>
+                <div class="privacy-service-name">Cloudflare Workers</div>
+                <div class="privacy-service-desc">Χρησιμοποιείται για λήψη δεδομένων μετεωρολογικού σταθμού. Το Cloudflare ενδέχεται να επεξεργάζεται διευθύνσεις IP για λόγους ασφαλείας και απόδοσης. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" class="privacy-link">Πολιτική Cloudflare →</a></div>
+              </div>
+            </div>
+
+            <div class="privacy-service-row">
+              <div class="privacy-service-icon">🌤️</div>
+              <div>
+                <div class="privacy-service-name">Open-Meteo API</div>
+                <div class="privacy-service-desc">Ανοικτό API καιρού — δεν συλλέγει προσωπικά δεδομένα. <a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener" class="privacy-link">Όροι Open-Meteo →</a></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-heading">4. Cookies</div>
+            <p>Η εφαρμογή δεν τοποθετεί ίδια cookies. Cookies ενδέχεται να προέρχονται από τις υπηρεσίες τρίτων που αναφέρονται παραπάνω (Google Analytics, Windfinder, VesselFinder). Μπορείτε να τα απενεργοποιήσετε μέσω των ρυθμίσεων του browser σας.</p>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-heading">5. Διαφημίσεις</div>
+            <p>Στο μέλλον ενδέχεται να ενσωματωθούν διαφημίσεις μέσω Google AdSense. Σε αυτή την περίπτωση η πολιτική θα ενημερωθεί αντίστοιχα. Η Google ενδέχεται να χρησιμοποιεί cookies για εξατομικευμένες διαφημίσεις βάσει προηγούμενων επισκέψεων.</p>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-heading">6. Αποποίηση ευθύνης</div>
+            <p>Τα δρομολόγια και τα δεδομένα καιρού παρέχονται <strong>αποκλειστικά για ενημερωτικούς σκοπούς</strong>. Δεν φέρουμε ευθύνη για τυχόν αλλαγές δρομολογίων λόγω καιρικών συνθηκών, τεχνικών προβλημάτων ή αποφάσεων λιμενικών αρχών. Επαληθεύετε πάντα απευθείας με τις αρχές.</p>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-heading">7. Επικοινωνία</div>
+            <p>Για οποιοδήποτε ζήτημα σχετικά με την πολιτική απορρήτου, επικοινωνήστε μέσω της σελίδας <a href="https://rio-antirrio-ferry.netlify.app/" class="privacy-link">rio-antirrio-ferry.netlify.app</a>.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span class="footer-copy">© 2026 Ρίο–Αντίρριο Πορθμείο Live</span>
+        <span class="footer-sep">·</span>
+        <button class="footer-link" onclick="showPage('privacy')">Πολιτική Απορρήτου</button>
+        <span class="footer-sep">·</span>
+        <span class="footer-note">Τα δρομολόγια είναι ενδεικτικά</span>
+      </div>
+    </footer>
+
+    <script>
+      // ---- NAV / HASH ROUTING ----
+      const VALID_PAGES = ['home', 'schedule', 'prices', 'weather', 'info', 'privacy'];
+
+      function showPage(id) {
+        const target = VALID_PAGES.includes(id) ? id : 'home';
+        // Update URL hash — the hashchange listener does the actual switch
+        if (location.hash === '#' + target) {
+          // Already here: just scroll to top smoothly
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          location.hash = '#' + target;
+        }
+      }
+
+      function applyHash() {
+        const hash = location.hash.replace('#', '');
+        const id = VALID_PAGES.includes(hash) ? hash : 'home';
+
+        document
+          .querySelectorAll('.page')
+          .forEach((p) => p.classList.remove('active'));
+        document
+          .querySelectorAll('.nav-btn[data-page]')
+          .forEach((b) => b.classList.remove('active'));
+
+        document.getElementById('page-' + id).classList.add('active');
+        const btn = document.querySelector(`.nav-btn[data-page="${id}"]`);
+        if (btn) btn.classList.add('active');
+
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      window.addEventListener('hashchange', applyHash);
+      // Apply on first load (handles direct links like site.com/#schedule)
+      applyHash();
+
+      // ---- CLOCK ----
+      function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').textContent = now.toLocaleTimeString(
+          'el-GR',
+          {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZone: 'Europe/Athens',
+          },
+        );
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      // ---- SCHEDULE GENERATION ----
+      function genSchedule(startH, startM, endH, endM, intervalMin) {
+        const times = [];
+        let h = startH,
+          m = startM;
+        while (true) {
+          times.push({ h, m });
+          m += intervalMin;
+          while (m >= 60) {
+            m -= 60;
+            h++;
+          }
+          if (h > endH || (h === endH && m > endM)) break;
+          if (h === endH && m === endM) {
+            times.push({ h, m });
+            break;
+          }
+        }
+        return times;
+      }
+
+      // ---- PER-PORT SCHEDULE DATA (from official timetable) ----
+      // Morning every 30 min — Rio starts :00, Antirrio starts :15
+      const rioMorning = genSchedule(7, 0, 14, 30, 30);
+      const antMorning = genSchedule(7, 15, 14, 45, 30);
+      // Afternoon every 20 min — identical from both ports
+      const sharedAft = genSchedule(15, 0, 22, 40, 20);
+      // Night every 90 min — different start times per port
+      const rioNight = [
+        { h: 23, m: 0 },
+        { h: 0, m: 30 },
+        { h: 2, m: 0 },
+        { h: 3, m: 30 },
+        { h: 5, m: 0 },
+        { h: 6, m: 30 },
+      ];
+      const antNight = [
+        { h: 23, m: 45 },
+        { h: 1, m: 15 },
+        { h: 2, m: 45 },
+        { h: 4, m: 15 },
+        { h: 5, m: 45 },
+      ];
+
+      // Full day lists for each port (used by countdown)
+      const rioAllTimes = [...rioMorning, ...sharedAft, ...rioNight];
+      const antAllTimes = [...antMorning, ...sharedAft, ...antNight];
+
+      // Schedule-page bands
+      const bands = [
+        { id: 'sched-morning-rio', times: rioMorning },
+        { id: 'sched-morning-ant', times: antMorning },
+        { id: 'sched-afternoon', times: sharedAft },
+        { id: 'sched-night-rio', times: rioNight },
+        { id: 'sched-night-ant', times: antNight },
+      ];
+
+      function pad(n) {
+        return String(n).padStart(2, '0');
+      }
+      function toMins(h, m) {
+        return h * 60 + m;
+      }
+
+      function getAthensMins() {
+        const now = new Date();
+        const athens = new Date(
+          now.toLocaleString('en-US', { timeZone: 'Europe/Athens' }),
+        );
+        return athens.getHours() * 60 + athens.getMinutes();
+      }
+
+      function getCurrentBandFreq(minsNow) {
+        if (minsNow >= 7 * 60 && minsNow < 15 * 60) return '30';
+        if (minsNow >= 15 * 60 && minsNow < 23 * 60) return '20';
+        return '90';
+      }
+
+      function renderSchedules() {
+        const minsNow = getAthensMins();
+        bands.forEach((band) => {
+          const el = document.getElementById(band.id);
+          if (!el) return;
+          let foundNext = false;
+          el.innerHTML = band.times
+            .map((t) => {
+              let diff = toMins(t.h, t.m) - minsNow;
+              if (diff < -720) diff += 1440; // midnight wrap for night times
+              const isPast = diff < -1;
+              const isNext = !isPast && !foundNext;
+              if (isNext) foundNext = true;
+              return `<div class="dep-pill ${isNext ? 'next' : ''} ${isPast ? 'past' : ''}">${pad(t.h)}:${pad(t.m)}</div>`;
+            })
+            .join('');
+        });
+      }
+
+      // Returns next departure {mins, time} from a given times array
+      function getNextDeparture(allTimes) {
+        const minsNow = getAthensMins();
+        let minDiff = Infinity,
+          nextTime = null;
+        allTimes.forEach((t) => {
+          let diff = toMins(t.h, t.m) - minsNow;
+          if (diff < 0) diff += 1440;
+          if (diff < minDiff) {
+            minDiff = diff;
+            nextTime = t;
+          }
+        });
+        return { mins: minDiff, time: nextTime };
+      }
+
+      // Returns minutes since the most recent departure (for "just left" indicator)
+      function getMinsSinceLastDeparture(allTimes) {
+        const minsNow = getAthensMins();
+        let minSince = Infinity;
+        allTimes.forEach((t) => {
+          let since = minsNow - toMins(t.h, t.m);
+          if (since < 0) since += 1440; // wrap for past-midnight times
+          if (since < minSince) minSince = since;
+        });
+        return minSince;
+      }
+
+      function updateCountdowns() {
+        const nextRio = getNextDeparture(rioAllTimes);
+        const nextAnt = getNextDeparture(antAllTimes);
+
+        document.getElementById('cnt-rio').textContent = nextRio.mins;
+        document.getElementById('cnt-rio-time').textContent =
+          pad(nextRio.time.h) + ':' + pad(nextRio.time.m);
+
+        document.getElementById('cnt-ant').textContent = nextAnt.mins;
+        document.getElementById('cnt-ant-time').textContent =
+          pad(nextAnt.time.h) + ':' + pad(nextAnt.time.m);
+
+        document.getElementById('freq-now').textContent =
+          getCurrentBandFreq(getAthensMins()) + "'";
+
+        // "Just left" indicator — show if last ferry departed ≤ 3 minutes ago
+        const JUST_LEFT_THRESHOLD = 3;
+        const rioSince = getMinsSinceLastDeparture(rioAllTimes);
+        const antSince = getMinsSinceLastDeparture(antAllTimes);
+        const rioJustLeft = document.getElementById('just-left-rio');
+        const antJustLeft = document.getElementById('just-left-ant');
+        rioJustLeft.style.display =
+          rioSince <= JUST_LEFT_THRESHOLD ? 'inline-block' : 'none';
+        antJustLeft.style.display =
+          antSince <= JUST_LEFT_THRESHOLD ? 'inline-block' : 'none';
+
+        // Status — use the sooner of the two ports
+        const minsNext = Math.min(nextRio.mins, nextAnt.mins);
+        const lang = document.documentElement.lang || 'el';
+        const txt = document.getElementById('status-text');
+        document.getElementById('status-dot').className = 'status-dot open';
+        document.getElementById('status-banner').className =
+          'status-banner open';
+        txt.textContent =
+          lang === 'en'
+            ? '🟢 Ferry operational · Next ferry in ' + minsNext + ' minutes'
+            : '🟢 Πορθμείο σε λειτουργία · Επόμενο πλοίο σε ' +
+              minsNext +
+              ' λεπτά';
+
+        renderSchedules();
+      }
+
+      setInterval(updateCountdowns, 30000);
+      updateCountdowns();
+
+      // Zoom override disabled - let aismap.js handle zoom via variables
+      // The zoom variable above will control the map zoom level
+
+      // ---- WEATHER (Open-Meteo, free, no key) ----
+      const WX_URL =
+        'https://api.open-meteo.com/v1/forecast?latitude=38.312&longitude=21.777&current=temperature_2m,wind_speed_10m,weather_code&timezone=Europe%2FAthens';
+
+      const WMO_ICON = {
+        0: '☀️',
+        1: '🌤',
+        2: '⛅',
+        3: '☁️',
+        45: '🌫',
+        48: '🌫',
+        51: '🌦',
+        53: '🌧',
+        55: '🌧',
+        61: '🌧',
+        63: '🌧',
+        65: '🌧',
+        71: '🌨',
+        73: '❄️',
+        75: '❄️',
+        80: '⛈',
+        81: '⛈',
+        82: '⛈',
+        95: '⛈',
+        96: '🌩',
+        99: '🌩',
+      };
+
+      function msBft(ms) {
+        if (ms < 0.3) return 0;
+        if (ms < 1.6) return 1;
+        if (ms < 3.4) return 2;
+        if (ms < 5.5) return 3;
+        if (ms < 8.0) return 4;
+        if (ms < 10.8) return 5;
+        if (ms < 13.9) return 6;
+        if (ms < 17.2) return 7;
+        if (ms < 20.8) return 8;
+        if (ms < 24.5) return 9;
+        if (ms < 28.5) return 10;
+        if (ms < 32.7) return 11;
+        return 12;
+      }
+
+      async function fetchWeather() {
+        try {
+          const r = await fetch(WX_URL);
+          const d = await r.json();
+          const c = d.current;
+          const bft = msBft(c.wind_speed_10m / 3.6);
+          const icon = WMO_ICON[c.weather_code] || '🌡';
+          const temp = Math.round(c.temperature_2m);
+          const windKmh = Math.round(c.wind_speed_10m);
+
+          // Mini weather (home)
+          document.getElementById('wm-icon').textContent = icon;
+          document.getElementById('wm-temp').textContent = temp + '°C';
+          document.getElementById('wm-desc').innerHTML = 'Τώρα';
+          document.getElementById('wm-wind').textContent = bft + ' Bft';
+          document.getElementById('wm-windspd').textContent = windKmh + ' km/h';
+        } catch (e) {
+          document.getElementById('wm-desc').innerHTML = 'Σφάλμα';
+        }
+      }
+
+      fetchWeather();
+      setInterval(fetchWeather, 600000);
+
+      // ---- WEATHER STATION DATA (Worker) ----
+      async function fetchWeatherStation() {
+        try {
+          const r = await fetch(
+            'https://little-cake-77d3.nikospasxalis94.workers.dev/',
+            {
+              method: 'GET',
+              mode: 'cors',
+              headers: { Accept: 'application/json' },
+            },
+          );
+
+          if (!r.ok) {
+            console.error('Worker response error:', r.status, r.statusText);
+            return;
+          }
+
+          const text = await r.text();
+          let d;
+          try {
+            d = JSON.parse(text);
+          } catch (parseError) {
+            console.error(
+              'JSON parse error. Response starts with:',
+              text.substring(0, 100),
+            );
+            console.error('Full response:', text);
+            return;
+          }
+
+          document.getElementById('wx-temp').textContent = d.temp + '°C';
+          document.getElementById('wx-hum').textContent =
+            d.humidity === '--' ? '--' : d.humidity + '%';
+          document.getElementById('wx-wind').textContent =
+            d.windSpeed + ' km/h';
+          document.getElementById('wx-dir').textContent = d.windDir;
+          document.getElementById('wx-bar').textContent = d.barometer + ' hPa';
+          document.getElementById('wx-dew').textContent = d.dewPoint + '°C';
+          document.getElementById('wx-today-rain').textContent =
+            d.todayRain + ' mm';
+          document.getElementById('wx-monthly-rain').textContent =
+            d.monthlyRain + ' mm';
+          document.getElementById('wx-sunrise').textContent = d.sunrise;
+          document.getElementById('wx-sunset').textContent = d.sunset;
+          console.log('Weather data loaded successfully:', d);
+        } catch (e) {
+          console.error('Weather station fetch error:', e);
+        }
+      }
+
+      fetchWeatherStation();
+      setInterval(fetchWeatherStation, 600000);
+
+      // ---- LANGUAGE TOGGLE ----
+      // ---- PRICES INNER TABS ----
+      function showPriceTab(id) {
+        document
+          .querySelectorAll('.price-section')
+          .forEach((s) => s.classList.remove('active'));
+        document
+          .querySelectorAll('.prices-tab-btn')
+          .forEach((b) => b.classList.remove('active'));
+        document.getElementById('price-section-' + id).classList.add('active');
+        const btn = document.querySelector(`.prices-tab-btn[data-tab="${id}"]`);
+        if (btn) btn.classList.add('active');
+      }
+
+      function toggleLanguage() {
+        const btn = document.querySelector('.lang-btn');
+        const isEnglish = btn.textContent === 'EN';
+        const lang = isEnglish ? 'el' : 'en';
+        btn.textContent = isEnglish ? 'EL' : 'EN';
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-el]').forEach((el) => {
+          if (el.dataset[lang]) {
+            el.textContent = el.dataset[lang];
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

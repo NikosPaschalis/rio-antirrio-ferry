@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Χάρτης | Ρίο–Αντίρριο Πορθμείο</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --navy: #0a1628;
+        --navy2: #0f2040;
+        --navy3: #162a52;
+        --teal: #0d9e75;
+        --teal2: #0b8562;
+        --teal-light: #e1f5ee;
+        --gold: #e8a020;
+        --gold-light: #faeeda;
+        --text: #e8edf5;
+        --text2: #9aafc8;
+        --text3: #c4d0e3;
+        --card: #0f2040;
+        --card2: #162a52;
+        --border: rgba(255, 255, 255, 0.08);
+        --border2: rgba(255, 255, 255, 0.15);
+        --red: #e24b4a;
+        --green: #1d9e75;
+      }
+      body {
+        background: var(--navy);
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
+      main { flex: 1; width: 100%; }
+      .site-footer {
+        background: var(--navy2);
+        border-top: 1px solid rgba(255,255,255,0.08);
+        padding: 14px 16px;
+        margin-top: 1rem;
+      }
+      .footer-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 6px 10px;
+        font-size: 12px;
+        color: var(--text2);
+      }
+      .footer-copy { font-weight: 500; color: var(--text3); }
+      .footer-sep { color: rgba(255,255,255,0.08); }
+      .footer-link {
+        background: none; border: none;
+        color: var(--teal); font-size: 12px;
+        cursor: pointer; padding: 0;
+        text-decoration: underline; text-underline-offset: 3px;
+      }
+      .footer-note { font-size: 11px; }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* Header */
+      header {
+        background: var(--navy2);
+        border-bottom: 1px solid var(--border2);
+        padding: 0 1rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .header-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 56px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+      }
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--teal);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .logo-icon svg {
+        width: 18px;
+        height: 18px;
+        fill: white;
+      }
+      .logo-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0;
+      }
+      .logo-sub {
+        font-size: 11px;
+        color: var(--text2);
+        margin-top: 1px;
+      }
+      .time-badge {
+        font-size: 13px;
+        color: var(--text2);
+        font-variant-numeric: tabular-nums;
+      }
+      .lang-btn {
+        font-size: 12px;
+        color: var(--text2);
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 4px 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .lang-btn:hover {
+        color: var(--text);
+        border-color: var(--border2);
+      }
+
+      /* Nav */
+      nav {
+        background: var(--navy2);
+        border-bottom: 1px solid var(--border);
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      nav::-webkit-scrollbar {
+        display: none;
+      }
+      .nav-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+      }
+      .nav-btn {
+        padding: 10px 18px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text2);
+        border: none;
+        background: none;
+        cursor: pointer;
+        white-space: nowrap;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .nav-btn.active {
+        color: var(--teal);
+        border-bottom-color: var(--teal);
+      }
+      .nav-btn:hover:not(.active) {
+        color: var(--text);
+      }
+
+      /* Main */
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 1.25rem 1rem 3rem;
+      }
+
+      /* Cards */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem;
+      }
+      .card-title {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.75rem;
+      }
+
+      /* Map section */
+      .map-container {
+        width: 100%;
+        margin: 1.5rem 0;
+      }
+      .map-wrapper {
+        width: 100%;
+        text-align: center;
+      }
+
+      /* Map links */
+      .map-links {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+      .map-link {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: border-color 0.2s;
+      }
+      .map-link:hover {
+        border-color: var(--border2);
+      }
+      .map-link-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+      .map-link-text {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+      }
+      .map-link-sub {
+        font-size: 11px;
+        color: var(--text2);
+        margin-top: 2px;
+      }
+
+      @media (max-width: 600px) {
+        .map-links {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M3 17h18l-2-5H5L3 17zm2-7h14l1-3H4l1 3zm7-7C9 3 8 4 8 5s1 2 2 2 2-1 2-2-1-2-2-2z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h1 class="logo-title">Ρίο – Αντίρριο</h1>
+            <div class="logo-sub">Πορθμείο Live</div>
+          </div>
+        </a>
+        <div class="time-badge" id="clock">--:--:--</div>
+        <button class="lang-btn" onclick="toggleLanguage()">EN</button>
+      </div>
+    </header>
+
+    <nav>
+      <div class="nav-inner">
+        <a href="index.html" class="nav-btn" data-el="Αρχική" data-en="Home"
+          >Αρχική</a
+        >
+        <a
+          href="index.html?page=schedule"
+          class="nav-btn"
+          data-el="Δρομολόγια"
+          data-en="Schedules"
+          >Δρομολόγια</a
+        >
+        <a
+          href="index.html?page=prices"
+          class="nav-btn"
+          data-el="Τιμές"
+          data-en="Prices"
+          >Τιμές</a
+        >
+        <a
+          href="map.html"
+          class="nav-btn active"
+          data-el="Ζωντανή Παρακολούθηση"
+          data-en="Live Vessel Tracking"
+          >Ζωντανή Παρακολούθηση</a
+        >
+        <a
+          href="index.html?page=weather"
+          class="nav-btn"
+          data-el="Καιρός"
+          data-en="Weather"
+          >Καιρός</a
+        >
+        <a
+          href="index.html?page=info"
+          class="nav-btn"
+          data-el="Πληροφορίες"
+          data-en="Info"
+          >Πληροφορίες</a
+        >
+      </div>
+    </nav>
+
+    <main>
+      <div class="card" style="padding: 0; margin-bottom: 1rem">
+        <div
+          class="card-title"
+          style="padding: 1.25rem 1.25rem 0"
+          data-el="Live Χάρτης Πλοίων"
+          data-en="Live Vessel Map"
+        >
+          Live Χάρτης Πλοίων
+        </div>
+        <div class="map-container">
+          <div class="map-wrapper">
+            <script type="text/javascript">
+              var width = '98%';
+              var height = '500';
+              var names = true;
+              var latitude = 38.3215;
+              var longitude = 21.7769;
+              var zoom = 13;
+              var track = true;
+            </script>
+            <script
+              type="text/javascript"
+              src="https://www.vesselfinder.com/aismap.js"
+            ></script>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-links">
+        <a
+          class="map-link"
+          href="https://maps.app.goo.gl/StftX8z6eRtcRn5r6"
+          target="_blank"
+        >
+          <div
+            class="map-link-icon"
+            style="background: rgba(13, 158, 117, 0.15); font-size: 18px"
+          >
+            📍
+          </div>
+          <div>
+            <div class="map-link-text" data-el="Λιμάνι Ρίου" data-en="Rio Port">
+              Λιμάνι Ρίου
+            </div>
+            <div
+              class="map-link-sub"
+              data-el="Google Maps"
+              data-en="Google Maps"
+            >
+              Google Maps
+            </div>
+          </div>
+        </a>
+        <a
+          class="map-link"
+          href="https://www.marinetraffic.com/en/ais/home/centerx:21.774/centery:38.318/zoom:14"
+          target="_blank"
+        >
+          <div
+            class="map-link-icon"
+            style="background: rgba(13, 158, 117, 0.15); font-size: 18px"
+          >
+            🚢
+          </div>
+          <div>
+            <div class="map-link-text">Marine Traffic</div>
+            <div
+              class="map-link-sub"
+              data-el="Live θέση πλοίων"
+              data-en="Live vessel positions"
+            >
+              Live θέση πλοίων
+            </div>
+          </div>
+        </a>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span class="footer-copy">© 2026 Ρίο–Αντίρριο Πορθμείο Live</span>
+        <span class="footer-sep">·</span>
+        <a href="index.html#privacy" class="footer-link">Πολιτική Απορρήτου</a>
+        <span class="footer-sep">·</span>
+        <span class="footer-note">Τα δρομολόγια είναι ενδεικτικά</span>
+      </div>
+    </footer>
+
+    <script>
+      // Clock
+      function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').textContent = now.toLocaleTimeString(
+          'el-GR',
+          {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZone: 'Europe/Athens',
+          },
+        );
+      }
+      setInterval(updateClock, 500);
+      updateClock();
+
+      // Language toggle
+      function toggleLanguage() {
+        const btn = document.querySelector('.lang-btn');
+        const isEnglish = btn.textContent === 'EN';
+        const lang = isEnglish ? 'el' : 'en';
+        btn.textContent = isEnglish ? 'EL' : 'EN';
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-el]').forEach((el) => {
+          if (el.dataset[lang]) {
+            el.textContent = el.dataset[lang];
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
