@@ -1,32 +1,32 @@
-# 🚢 Ρίο–Αντίρριο Πορθμείο Live
+# 🚢 Rio–Antirrio Ferry Live
 
-Ζωντανή πληροφοριακή εφαρμογή για το πορθμείο **Ρίο–Αντίρριο** (Κόλπος Πατραϊκός, Ελλάδα).
+A real-time information app for the **Rio–Antirrio ferry** crossing (Patraikos Gulf, Greece).
 
 🔗 **Live site:** [rio-antirrio-ferry.netlify.app](https://rio-antirrio-ferry.netlify.app/)
 
 ---
 
-## ✨ Χαρακτηριστικά
+## ✨ Features
 
-- **⏱ Live αντίστροφη μέτρηση** — Επόμενη αναχώρηση από Ρίο & Αντίρριο ανεξάρτητα
-- **🗓 Πλήρη δρομολόγια 2026** — Πρωί / Απόγευμα / Βράδυ για κάθε λιμάνι
-- **💶 Τιμοκατάλογος** — Ναύλοι, σύγκριση & χρήσιμες πληροφορίες σε tabs
-- **🚢 Ζωντανή παρακολούθηση πλοίων** — VesselFinder AIS map
-- **🌬 Καιρός & Άνεμος** — Open-Meteo API + Windfinder iframe
-- **📍 Χρήσιμες πληροφορίες** — Τηλέφωνα, συντεταγμένες, σύνδεσμοι
-- **🌐 Δίγλωσσο** — Ελληνικά / Αγγλικά
+- **⏱ Live countdown** — Next departure from Rio & Antirrio independently
+- **🗓 Full 2026 schedule** — Morning / Afternoon / Night per port
+- **💶 Fare guide** — Fares, comparison & useful info in tabs
+- **🚢 Live vessel tracking** — VesselFinder AIS map
+- **🌬 Weather & Wind** — Open-Meteo API + Windfinder iframe
+- **📍 Useful info** — Phone numbers, coordinates, links
+- **🌐 Bilingual** — Greek / English
 - **🔗 Hash routing** — Bookmarkable URLs (`#schedule`, `#prices`, `#weather`…)
 - **📱 Responsive** — Mobile-first design
 
 ---
 
-## 🗂 Δομή αρχείων
+## 🗂 File structure
 
 ```
-rio-antirrio-ferris/
-├── index.html          # Κύρια SPA εφαρμογή
-├── styles.css          # Όλα τα styles
-├── map.html            # Σελίδα ζωντανής παρακολούθησης
+rio-antirrio-ferry/
+├── index.html          # Main SPA
+├── styles.css          # All styles
+├── map.html            # Live vessel tracking page
 ├── sitemap.xml         # SEO sitemap
 ├── robots.txt          # SEO robots
 └── google…html         # Google Search Console verification
@@ -34,15 +34,15 @@ rio-antirrio-ferris/
 
 ---
 
-## 🛠 Τεχνολογίες
+## 🛠 Tech stack
 
 | | |
 |---|---|
 | Frontend | Vanilla HTML / CSS / JavaScript |
 | Hosting | [Netlify](https://netlify.com) |
-| Καιρός | [Open-Meteo API](https://open-meteo.com) |
-| Πλοία | [VesselFinder](https://www.vesselfinder.com) |
-| Άνεμος | [Windfinder](https://www.windfinder.com) |
+| Weather | [Open-Meteo API](https://open-meteo.com) |
+| Vessels | [VesselFinder](https://www.vesselfinder.com) |
+| Wind | [Windfinder](https://www.windfinder.com) |
 | Analytics | Google Analytics |
 | Worker | Cloudflare Workers |
 
@@ -50,7 +50,7 @@ rio-antirrio-ferris/
 
 ## 🚀 Deploy
 
-Το site γίνεται deploy αυτόματα μέσω Netlify από το `main` branch.
+Site auto-deploys via Netlify from the `master` branch.
 
 ```bash
 git add .
@@ -60,6 +60,6 @@ git push
 
 ---
 
-## 📄 Άδεια χρήσης
+## 📄 License
 
-Ανεξάρτητο προσωπικό project. Τα δρομολόγια είναι ενδεικτικά — επαληθεύετε πάντα με τις λιμενικές αρχές.
+Independent personal project. Schedules are indicative — always verify with port authorities.
